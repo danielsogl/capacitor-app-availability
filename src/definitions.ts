@@ -6,5 +6,6 @@ declare module "@capacitor/core" {
 }
 
 export interface AppAvailabilityPlugin {
-  echo(options: { value: string }): Promise<{value: string}>;
+  check(sheme: string): Promise<{ value: boolean }>;
+  open(sheme: string): Promise<void>;
 }

@@ -8,10 +8,26 @@ import Capacitor
 @objc(AppAvailability)
 public class AppAvailability: CAPPlugin {
     
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.success([
-            "value": value
-        ])
+    @objc func check(_ call: CAPPluginCall) {
+        let appScheme = call.getString("sheme") ?? ""
+        let appUrl = URL(string: appScheme)
+        
+        if UIApplication.shared.canOpenURL(appUrl! as URL) {
+            call.resolve(["value": true]);
+        } else {
+            call.resolve(["value": false]);
+        }
+    }
+    
+    @objc func open(_ call: CAPPluginCall) {
+        let appScheme = call.getString("sheme") ?? ""
+        let appUrl = URL(string: appScheme)
+        
+        if UIApplication.shared.canOpenURL(appUrl! as URL) {
+            UIApplication.shared.open(appUrl!)
+            call.resolve()
+        } else {
+            call.error("App is not installed. Call check function before trying to open an app");
+        }
     }
 }
